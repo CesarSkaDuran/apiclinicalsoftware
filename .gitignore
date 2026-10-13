@@ -1,0 +1,43 @@
+/node_modules
+
+/public/hot
+
+/public/storage
+
+/storage/*.key
+
+/vendor
+
+/.idea
+
+/.vscode
+
+/.vagrant
+
+Homestead.json
+
+Homestead.yaml
+
+npm-debug.log
+
+yarn-error.log
+
+.env
+
+# Respaldos y artefactos
+*.zip
+cgi-bin/
+
+# Datos de pacientes / archivos subidos (no versionar)
+/public/import_files
+/public/img/multim
+/public/img/profiles
+
+# Logs y archivos de error
+/storage/logs/*.log
+error_log
+/public/error_log
+
+# Artefactos ajenos al código fuente
+/public/D_
+
