@@ -14,7 +14,7 @@ return [
 
     'supportsCredentials' => false,
     'allowedOrigins' => [
-        'http://localhost:4200', 'http://localhost',
+        'http://localhost:4200', 'http://127.0.0.1:4200', 'http://localhost',
         'https://hc.clinicalsoftware.org', 'http://hc.clinicalsoftware.org',
         'https://drparra.clinicalsoftware.org', 'http://drparra.clinicalsoftware.org',
         'https://drdanielabarrera.clinicalsoftware.org', 'http://drdanielabarrera.clinicalsoftware.org',

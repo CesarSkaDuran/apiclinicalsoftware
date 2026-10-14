@@ -33,4 +33,31 @@ Route::group([
     Route::post('comprobanteMultimedia', 'ComprobanteController@comprobanteMultimedia');
 });
 
+Route::group([
+    'middleware' => ['cors', 'require.https', 'auth:api'],
+    'prefix' => 'rips'
+], function ($router) {
+    Route::get('config', 'RipsController@providerConfig');
+    Route::put('config', 'RipsController@saveProviderConfig');
+    Route::get('reports', 'RipsController@reports');
+    Route::post('reports', 'RipsController@storeReport');
+    Route::get('reports/{id}', 'RipsController@showReport');
+});
+
+Route::group([
+    'middleware' => ['cors', 'require.https', 'auth:api'],
+    'prefix' => 'dashboard'
+], function ($router) {
+    Route::get('summary', 'DashboardController@summary');
+});
+
+Route::group([
+    'middleware' => ['cors', 'require.https', 'auth:api'],
+    'prefix' => 'notifications'
+], function ($router) {
+    Route::post('daily-run', 'NotificationsController@runDaily');
+    Route::get('birthdays-today', 'NotificationsController@birthdaysToday');
+    Route::post('birthday/{patientId}', 'NotificationsController@sendBirthday');
+});
+
 route::post('uploadFile', 'API\CargaController@uploadFile');

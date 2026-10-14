@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Exception;
+use Asm89\Stack\CorsService;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -47,5 +49,21 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         return parent::render($request, $exception);
+    }
+
+    /**
+     * Respond to an unauthenticated API request with a 401 JSON response.
+     * The backend has no web login route, so the default redirect to route('login') fails with a 500.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Auth\AuthenticationException  $exception
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        $cors = app(CorsService::class);
+        $response = response()->json(['message' => 'Unauthenticated.'], 401);
+
+        return $cors->isCorsRequest($request) ? $cors->addActualRequestHeaders($response, $request) : $response;
     }
 }

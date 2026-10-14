@@ -14,6 +14,10 @@ use Folklore\GraphQL\Support\Type as GraphQLType;
 
 use App\GraphQL\Type\Scalar\Timestamp;
 
+use App\NotificationLog;
+
+use Carbon\Carbon;
+
 
 
 /**
@@ -221,6 +225,41 @@ class PatientType extends GraphQLType
                 'type' => Type::int(),
 
                 'description' => 'The status of user'
+
+            ],
+
+            'birthdayNotification' => [
+
+                'type' => Type::string(),
+
+                'description' => 'Estado de la notificacion de cumpleanos del dia: sent, failed, pending o null si no cumple hoy',
+
+                'resolve' => function ($root) {
+                    if (empty($root->birth_date)) {
+                        return null;
+                    }
+
+                    try {
+                        $birth = Carbon::parse($root->birth_date);
+                    } catch (\Exception $e) {
+                        return null;
+                    }
+
+                    $today = Carbon::now('America/Bogota');
+
+                    if ($birth->month != $today->month || $birth->day != $today->day) {
+                        return null;
+                    }
+
+                    $log = NotificationLog::where('type', 'birthday')
+                        ->where('channel', 'email')
+                        ->where('patient_id', $root->id)
+                        ->where('reference', $today->toDateString())
+                        ->orderBy('id', 'desc')
+                        ->first();
+
+                    return $log ? $log->status : 'pending';
+                },
 
             ],
 
